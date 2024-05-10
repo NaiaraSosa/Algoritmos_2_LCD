@@ -93,16 +93,107 @@ class ArbolN(Generic[T]):
         pass
 
     def nivel(self, x: T) -> int:
-        pass
+        def buscar(t: ArbolN[T], x):
+            pass
     
     def copy(self) -> "ArbolN[T]":
         pass
         
     def sin_hojas(self) -> "ArbolN[T]":
-        pass
+        if self.es_hoja():
+            return None
+        nuevo = ArbolN(self.dato)
+        for subarbol in self.subarboles:
+            a = subarbol.sin_hojas()
+            if a is None:
+                continue
+            nuevo.insertar_subarbol(a)
+        return nuevo
     
-    def recorrido_guiado(self, direcciones: list[int]) -> T:
-        pass
+    # Version 1 -> Saco el dato buscado en el predecesor directo
+    def antecesores_pred(self, dato: T) -> list[T]:
+        if dato == self.dato:
+            return [dato]
+        elif self.es_hoja():
+            return []
+        else:
+            i = 0
+            resultado = []
+            while i < len(self.subarboles) and not resultado:
+                resultado = self.subarboles[i].antecesores_pred(dato)
+                i += 1
+            if resultado:
+                if resultado [0] == dato:
+                    resultado.pop()
+                resultado.insert(0, self.dato)
+            return resultado
+    
+    # Version 2 -> Saco el dato buscado al final
+    def antecesores_fin(self, dato: T) -> list[T]:
+        def antecesor_interna(t: ArbolN[T]) -> list[T]:
+            if dato == t.dato:
+                return [dato]
+            elif t.es_hoja():
+                return []
+            else:
+                i = 0
+                resultado = []
+                while i < len(t.subarboles) and not resultado:
+                    resultado = antecesor_interna(t.subarboles[i])
+                    i += 1
+                if resultado:
+                    resultado.insert(0, t.dato)
+                return resultado
+        resultado = antecesor_interna(self)
+        if resultado:
+            resultado.pop()
+        return resultado
+
+    # Version 3 -> Look ahead (con esta metodologia nunca llegamos al nodo buscado, solo en el caso de que sea la raíz)
+    def antecesores_look(self, dato: T) -> list[T]:
+        if dato == self.dato or self.es_hoja():
+            return []
+        else:
+            i = 0
+            resultado = []
+            encontrado = False
+            while i < len(self.subarboles) and not encontrado:
+                if self.subarboles[i].dato == dato:
+                    encontrado = True
+                else:
+                    resultado = self.subarboles[i].antecesores_look(dato)
+                    encontrado = bool(resultado) # lo encontre
+                i += 1
+            if encontrado:
+                resultado.insert(0, self.dato)
+            return resultado
+
+    # Version 4 -> Top-down, vamos llenando la lista y borrando a medida que encontremo y no encontremos
+    def antecesores(self, dato: T) -> list[T]:
+        def antecesor_interna(t: ArbolN[T], antecesores: list[T]):
+            if dato == t.dato:
+                return antecesores
+            elif t.es_hoja():
+                return []
+            else:
+                i = 0
+                antecesores.append(t.dato)
+                resultado = []
+                while i < len(t.subarboles) and not resultado:
+                    resultado = antecesor_interna(t.subarboles[i], antecesores.copy())
+                    i += 1
+                return resultado
+        return antecesor_interna(self,[])
+
+    def recorrido_guiado(self, direcciones: list[int]) -> T:   # profundidad
+        if not direcciones:
+            return self.dato
+        else:
+            i = direcciones.pop(0)
+            if i >= len(self.subarboles):
+                raise Exception('No existe la dirección ingresada.')
+            return self.subarboles[i].recorrido_guiado(direcciones)
+
 
 def main():
     t = ArbolN(1)
@@ -127,6 +218,13 @@ def main():
   
     print(f'Altura: {t.altura()}')
     print(f'Nodos: {len(t)}')
+
+    print(f'Antecesores: {t.antecesores_pred(9)}')
+    print(f'Antecesores: {t.antecesores_fin(9)}')
+    print(f'Antecesores: {t.antecesores_look(9)}')
+    print(f'Antecesores: {t.antecesores(9)}')
+
+    print(f'Recorrido guiado: {t.recorrido_guiado([2,0,0])}')
 
     # print(f'BFS: {t.bfs()}')
     # print(f'DFS preorder : {t.preorder()}')
