@@ -1,0 +1,8 @@
+Ideas Tp
+
+Cambiar el diagrama de clases 
+- Unir el arbol n-ario en una sola clase (eliminar Utils) e implementar todo lo del arbol ahi
+- Clase Clasifier con todos los metodos del Arbol de decision como el predict(), bla bla
+- Hacer clases de arboles con cada algoritmo de clasificacion, osea separar en ArbolDecisionID3, ArbolDecisionC4, etc (estos heredan de arbol n-ario)
+- Clase RandomForest que utilice el CLasifier
+- Tendremos clases con cada cosa tipo Entropia, IndiceGini y cosas asi que use el Clasifier
