@@ -4,10 +4,13 @@ from functools import reduce
 T = TypeVar('T')
 
 class ArbolN(Generic[T]):
+
+    # Estructura con recursión directa múltiple
     def __init__(self, dato: T):
         self._dato: T = dato
         self._subarboles: list[ArbolN[T]] = []
-       
+    
+    # Decidimos mantener los atributos privados para convertirlos en propiedades
     @property
     def dato(self) -> T:
         return self._dato
@@ -24,9 +27,11 @@ class ArbolN(Generic[T]):
     def subarboles(self, subarboles: "list[ArbolN[T]]"):
         self._subarboles = subarboles
 
+    # Extender árboles con nuevos descendientes
     def insertar_subarbol(self, subarbol: "ArbolN[T]"):
         self.subarboles.append(subarbol)
 
+    # Presenta si un nodo no tiene subárboles
     def es_hoja(self) -> bool:
         return self.subarboles == []
     
@@ -36,14 +41,25 @@ class ArbolN(Generic[T]):
                 return 0
             else:
                 return max(bosque[0].altura(), altura_n(bosque[1:]))
-        
         return 1 + altura_n(self.subarboles)
-        
+    
+    # Acá vemos la lógica más entendible en el caso iterativo
+    def altura_iter(self) -> int:
+        altura_actual = 0
+        for subarbol in self.subarboles:
+            altura_actual = max(altura_actual, subarbol.altura())
+        return altura_actual + 1
+    
+    # Cantidad de nodos
     def __len__(self) -> int:
         if self.es_hoja():
             return 1
         else:
             return 1 + sum([len(subarbol) for subarbol in self.subarboles])
+        
+    # Implementar el método __eq__() que permita identificar si dos árboles n-arios son iguales.
+    def __eq__(self, otro: "ArbolN[T]") -> bool:
+        return isinstance(otro, ArbolN) and self.dato == otro.dato and self.subarboles == otro.subarboles
 
     def __str__(self):
         def mostrar(t: ArbolN[T], nivel: int):
@@ -69,9 +85,6 @@ class ArbolN(Generic[T]):
         def preorder_n(bosque: list[ArbolN[T]]) -> list[T]:
             return [] if not bosque else bosque[0].preorder3() + preorder_n(bosque[1:])
         return [self.dato] + preorder_n(self.subarboles)
-    
-    def __eq__(self, otro: "ArbolN[T]") -> bool:
-        pass
 
     def bfs(self) -> list[T]:
         pass
@@ -91,7 +104,7 @@ class ArbolN(Generic[T]):
     def recorrido_guiado(self, direcciones: list[int]) -> T:
         pass
 
-if __name__ == '__main__':
+def main():
     t = ArbolN(1)
     n2 = ArbolN(2)
     n3 = ArbolN(3)
@@ -109,26 +122,29 @@ if __name__ == '__main__':
     n4.insertar_subarbol(n7)
     n4.insertar_subarbol(n8)
     n7.insertar_subarbol(n9)
-    
-    print(t)
 
+    print(t)
+  
     print(f'Altura: {t.altura()}')
     print(f'Nodos: {len(t)}')
 
-    print(f'BFS: {t.bfs()}')
-    print(f'DFS preorder : {t.preorder()}')
-    print(f'DFS preorder2: {t.preorder2()}')
-    print(f'DFS preorder3: {t.preorder3()}')
-    print(f'DFS posorder: {t.posorder()}')
+    # print(f'BFS: {t.bfs()}')
+    # print(f'DFS preorder : {t.preorder()}')
+    # print(f'DFS preorder2: {t.preorder2()}')
+    # print(f'DFS preorder3: {t.preorder3()}')
+    # print(f'DFS posorder: {t.posorder()}')
 
-    print(f'Nivel de 9: {t.nivel(9)}')
-    print(f'Nivel de 13: {t.nivel(13)}')
+    # print(f'Nivel de 9: {t.nivel(9)}')
+    # print(f'Nivel de 13: {t.nivel(13)}')
 
-    t2 = t.copy()
-    t3 = t2.sin_hojas()
-    print(t)
-    print(t2)
-    print(t3)
-    print(f't == t2 {t == t2}')
+    # t2 = t.copy()
+    # t3 = t2.sin_hojas()
+    # print(t)
+    # print(t2)
+    # print(t3)
+    # print(f't == t2 {t == t2}')
 
-    print(f'recorrido_guiado [2,0,0]: {t2.recorrido_guiado([2,0,0])}')
+    # print(f'recorrido_guiado [2,0,0]: {t2.recorrido_guiado([2,0,0])}')
+
+if __name__ == '__main__':
+    main()
