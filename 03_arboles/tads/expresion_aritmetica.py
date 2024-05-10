@@ -45,9 +45,11 @@ class Division(Operador):
     
 
 class ExpresionAritmetica(ArbolH[Number,Operador]):
+    # No podemos hacerlo privado asi que lo hacemos lo mas simple posible (hoja)
     def __init__(self, dato: Number):
         super().__init__(dato)
 
+    # Y construimos con el anterior (buena práctica)
     @staticmethod
     def valor(valor: Number) -> "ExpresionAritmetica":
         return ExpresionAritmetica(valor)
@@ -78,7 +80,7 @@ class ExpresionAritmetica(ArbolH[Number,Operador]):
     def es_valor(self) -> bool:
         return self.es_hoja()
     
-    def evaluar(self) -> Number:
+    def evaluar(self) -> Number:  # postorder (primero operandos y despues raiz que es el operador)
         if self.es_valor():
             return self.dato_hoja()
         operador = self.dato_nodo()
@@ -111,6 +113,10 @@ def main():
     )
 
     print(expresion)
+    print(f'El resultado es: {expresion.evaluar()}')
+
+if __name__ == "__main__":
+    main()
     print(f'El resultado es: {expresion.evaluar()}')
 
 if __name__ == "__main__":
