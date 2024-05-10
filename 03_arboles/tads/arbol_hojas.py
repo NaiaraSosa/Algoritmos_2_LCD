@@ -3,6 +3,7 @@ from typing import Generic, TypeVar
 T = TypeVar('T')
 S = TypeVar('S')
 
+# Estoy evaluando la idea de dos nodos distintos (operando y numerico)
 class ArbolH(Generic[T, S]):
     def __init__(self, dato: T | S):
         self._dato: T | S = dato
