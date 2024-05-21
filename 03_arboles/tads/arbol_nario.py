@@ -72,33 +72,69 @@ class ArbolN(Generic[T]):
             
         return mostrar(self, 0)
 
+    # Caso recursivo
     def preorder(self) -> list[T]:
-        return reduce(lambda recorrido, subarbol: recorrido + subarbol.preorder(), self.subarboles, [self.dato])
+        return reduce(
+            lambda recorrido, subarbol: recorrido + subarbol.preorder(), # concatena la lista construida con el resultado de cada subarbol
+            self.subarboles, # el iterable son los subarboles del nodo
+            [self.dato]  # lista con el dato del nodo raiz
+        )  
 
+    # Caso iterativo
     def preorder2(self) -> list[T]:
         recorrido = [self.dato]
         for subarbol in self.subarboles:
             recorrido += subarbol.preorder2()
         return recorrido
     
+    # Caso recursión mutua
     def preorder3(self) -> list[T]:
         def preorder_n(bosque: list[ArbolN[T]]) -> list[T]:
-            return [] if not bosque else bosque[0].preorder3() + preorder_n(bosque[1:])
+            if not bosque:
+                return []
+            else:
+                return bosque[0].preorder3() + preorder_n(bosque[1:])
         return [self.dato] + preorder_n(self.subarboles)
-
-    def bfs(self) -> list[T]:
-        pass
     
-    def posorder(self) -> list[T]:
-        pass
+    # Implementar postorder con recursión múltiple directa
+    def postorder(self) -> list[T]:
+        recorrido = []
+        for subarbol in self.subarboles:
+            recorrido += subarbol.postorder()
+        return  recorrido + [self.dato]
+
+    # Implementar postorder con recursión mutua
+    def postorder2(self) -> list[T]:
+        def postorder_n(bosque: list[ArbolN[T]]) -> list[T]:
+            if not bosque:
+                return []
+            else:
+                return bosque[0].postorder2() + postorder_n(bosque[1:])
+        return postorder_n(self.subarboles) + [self.dato]
+    
+    def bfs(self) -> list[T]:
+        # q es la lista de nodos no visitados y camino la lista de los ya visitados
+        def recorrer(q: list[ArbolN[T]], camino: list[T]) -> list[T]: 
+            if not q:
+                return camino
+            actual = q.pop(0) # saco primer elemento de q
+            camino.append(actual.dato) # lo asignamos a camino, osea que ya lo visitamos
+            for subarbol in actual.subarboles:
+                q.append(subarbol)
+            return recorrer(q, camino) # luego de recorrer todos los sub del actual, llamamos a recorrer con la lista q actualizada
+        return recorrer([self], []) 
+    
+    def copy(self) -> "ArbolN[T]":
+        nuevo = ArbolN(self.dato)
+        for subarbol in self.subarboles:
+            nuevo_subarbol = subarbol.copy()
+            nuevo.insertar_subarbol(nuevo_subarbol)
+        return nuevo
 
     def nivel(self, x: T) -> int:
         def buscar(t: ArbolN[T], x):
-            pass
-    
-    def copy(self) -> "ArbolN[T]":
-        pass
-        
+            pass   
+
     def sin_hojas(self) -> "ArbolN[T]":
         if self.es_hoja():
             return None
@@ -219,12 +255,19 @@ def main():
     print(f'Altura: {t.altura()}')
     print(f'Nodos: {len(t)}')
 
+    print(f'DFS Preorder: {t.preorder()}')
+    print(f'DFS Postorder: {t.postorder()}')
+    print(f'BFS: {t.bfs()}')
+
     print(f'Antecesores: {t.antecesores_pred(9)}')
     print(f'Antecesores: {t.antecesores_fin(9)}')
     print(f'Antecesores: {t.antecesores_look(9)}')
     print(f'Antecesores: {t.antecesores(9)}')
 
     print(f'Recorrido guiado: {t.recorrido_guiado([2,0,0])}')
+
+    t2 = t.copy()
+    print(t2)
 
     # print(f'BFS: {t.bfs()}')
     # print(f'DFS preorder : {t.preorder()}')

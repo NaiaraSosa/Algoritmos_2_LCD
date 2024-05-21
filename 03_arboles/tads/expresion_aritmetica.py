@@ -117,7 +117,5 @@ def main():
 
 if __name__ == "__main__":
     main()
-    print(f'El resultado es: {expresion.evaluar()}')
 
-if __name__ == "__main__":
-    main()
+

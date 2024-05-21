@@ -6,3 +6,7 @@ Cambiar el diagrama de clases
 - Hacer clases de arboles con cada algoritmo de clasificacion, osea separar en ArbolDecisionID3, ArbolDecisionC4, etc (estos heredan de arbol n-ario)
 - Clase RandomForest que utilice el CLasifier
 - Tendremos clases con cada cosa tipo Entropia, IndiceGini y cosas asi que use el Clasifier
+
+PODAR
+En el sin hojas para podar el arbol vamos a tener que sacar las hojas y concatenar en la hoja anterior todas las muestras. 
+El dato de todas las hojas concatenados en la hoja padre. 

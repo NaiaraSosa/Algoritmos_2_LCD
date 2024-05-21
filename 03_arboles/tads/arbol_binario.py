@@ -256,14 +256,14 @@ def main():
     print(f'BFS: {t.bfs()}')
     print(f'BFS invertido: {t.bfs_invertido()}')
 
-    t2: ArbolBinario[int] = t.sin_hojas()
-    print(t2)
+    # t2: ArbolBinario[int] = t.sin_hojas()
+    # print(t2)
 
     t3 = t.podar(5)
     print(t3)
 
-    t4 = t.espejo()
-    print(t4)
+    # t4 = t.espejo()
+    # print(t4)
 
 if __name__ == '__main__':
     main()
