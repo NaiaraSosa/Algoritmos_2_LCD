@@ -1,5 +1,3 @@
-from navegador import Navegador
-
 class EntradaConsola:
     def __init__(self, comandos: list[str]) -> None:
         self.comandos = comandos

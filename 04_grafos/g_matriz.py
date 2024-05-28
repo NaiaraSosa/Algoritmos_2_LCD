@@ -1,5 +1,8 @@
-"""
-Implementar la variante del TAD Grafo (grafo simple) representado con conjunto de nodos y arista con sus constructores y proyectores básicos. 
+from typing import TypeVar
+T = TypeVar('T')
+
+'''
+Implementar la variante del TAD Grafo (grafo simple) representado con una matriz de adyacencia con sus constructores y proyectores básicos. 
 Los nodos del grafo simplemente tienen una etiqueta única para identificarlos y pueden asociarse entre ellos mediante aristas o arcos. 
 Se puede crear un grafo vacío. Implementar las funciones:
 -agregar_nodo
@@ -8,11 +11,7 @@ Se puede crear un grafo vacío. Implementar las funciones:
 -eliminar_arista
 -es_vecino_de
 -vecinos_de
-
-"""
-
-from typing import Generic, Typevar, Optional
-T = Typevar('T')
+'''
 
 class GrafoMatrizAdyacencia():
     def __init__(self) -> None:
@@ -26,8 +25,8 @@ class GrafoMatrizAdyacencia():
         self.matriz.append([0 for nodo in self.indices])
         
     def agregar_arista(self, nodoA: int, nodoB: int) -> None:
-        indiceA = self.indices.indez(nodoA)
-        indiceB = self.indices.indez(nodoB)
+        indiceA = self.indices.index(nodoA)
+        indiceB = self.indices.index(nodoB)
         self.matriz[indiceA][indiceB] = 1
         self.matriz[indiceB][indiceA] = 1
         

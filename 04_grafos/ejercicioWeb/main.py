@@ -21,18 +21,22 @@ def crear_internet():
     duck.agregar_vinculo('ubuntu', ubuntu)
 
     ubuntu.agregar_vinculo('unsam', unsam)
+    ubuntu.agregar_vinculo('google', google)
+    github.agregar_vinculo('github', github)
     unsam.agregar_vinculo('github', github)
 
     internet.agregar_pagina(google)
     internet.agregar_pagina(unsam)
-    internet.agregar_pagina(unsam)
-    internet.agregar_pagina(unsam)
-    internet.agregar_pagina(unsam)
+    internet.agregar_pagina(ubuntu)
+    internet.agregar_pagina(github)
+    internet.agregar_pagina(duck)
     
+    return internet
 
 def main():
     internet = crear_internet()
     navegador = Navegador(internet)
+    navegador.run()
 
 if __name__ == '__main__':
     main()

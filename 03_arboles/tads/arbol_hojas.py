@@ -29,12 +29,12 @@ class ArbolH(Generic[T, S]):
 
     def dato_hoja(self) -> T:
         if self.es_hoja():
-            return self._dato
+            return self._dato # type: ignore
         raise ValueError("El nodo actual no es una hoja")
 
     def dato_nodo(self) -> S:
         if not self.es_hoja():
-            return self._dato
+            return self._dato # type: ignore
         raise ValueError("El nodo actual es una hoja")
     
     @property
@@ -78,9 +78,20 @@ class ArbolH(Generic[T, S]):
             ) and self._tipo_hoja == otro._tipo_hoja
         )
     
+    # Devuelve si el árbol es consistente en sus tipos de datos.
     def es_valido(self) -> bool:
-        pass
-        
+        def validar_nodo(nodo: "ArbolH[T,S]", tipo_nodo: type, tipo_hoja: type) -> bool:
+            if nodo.es_hoja():
+                return isinstance(nodo._dato, tipo_hoja)
+            elif not isinstance(nodo._dato, tipo_nodo):
+                return False
+            else:
+                return all(validar_nodo(subarbol, tipo_nodo, tipo_hoja) for subarbol in nodo.subarboles)
+        if self.es_hoja():
+            return True  # Un árbol con solo una hoja es siempre válido
+        return validar_nodo(self, self._tipo_nodo, self._tipo_hoja) # type: ignore
+
+
 
 def main():
     nodo_b = ArbolH.crear_nodo_y_hojas('b', 6, 7)
@@ -93,6 +104,8 @@ def main():
 
     nodo_int = ArbolH.crear_nodo_y_hojas(1, 2, 3)
     # arbol.insertar_subarbol(nodo_int)  # Debería lanzar una excepción
+
+    print(f'Es válido: {arbol.es_valido()}')
 
 if __name__ == '__main__':
     main()
