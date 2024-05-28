@@ -113,14 +113,11 @@ class ArbolBinarioOrdenado(ArbolBinario[T]):
                     t.si().max().insertar_sd(t.sd()) # inserta sd de t como sd del nodo mayor del si de t
                     t.raiz = t.si().raiz # establece la raiz del si de t eliminando t y fusionando los subarboles
 
-        '''def eliminar_copia(t: ArbolBinarioOrdenado[T]):
-            max, pred = t.si().max_con_pred()
+        def eliminar_copia(t: ArbolBinarioOrdenado[T]):
+            max,pred = t.si().max_con_pred()
             if max is not None and pred is not None:
-                t.raiz.dato = max.dato()  # Aquí cambiamos solo el dato de la raíz, no la raíz completa
-            if pred.si().raiz == max.raiz:  # Si el predecesor es el padre directo del máximo
-                pred.raiz.si = max.si()  # Conectar el subárbol izquierdo del máximo al predecesor
-            else:
-                pred.raiz.sd = max.si()  # Conectar el subárbol izquierdo del máximo al predecesor'''
+                t.raiz.dato = max.dato() #type:ignore
+                pred.insertar_sd(max.si())
 
         if not self.es_vacio():
             if valor == self.dato():
