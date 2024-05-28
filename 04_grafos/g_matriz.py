@@ -22,7 +22,7 @@ class GrafoMatrizAdyacencia():
         self.indices.append(nodo)
         for fila in self.matriz:
             fila.append(0)
-        self.matriz.append([0 for nodo in self.indices])
+        self.matriz.append([ 0 for nodo in self.indices])
         
     def agregar_arista(self, nodoA: int, nodoB: int) -> None:
         indiceA = self.indices.index(nodoA)
@@ -37,14 +37,49 @@ class GrafoMatrizAdyacencia():
             fila.pop(indice)
         self.indices.pop(indice)
         
-    def eliminar_arista(self, nodoA: int, nodoB: int) -> None:
-        pass
-        
-    def es_vecino_de(self, nodoA, nodoB):
+    def eliminar_arista(self,nodoA,nodoB) -> None:
         indiceA = self.indices.index(nodoA)
         indiceB = self.indices.index(nodoB)
-        
-    def vecinos_de(self) -> None:
-        pass
+        self.matriz[indiceA][indiceB] = 0
+        self.matriz[indiceB][indiceA] = 0
 
-        
+    def es_vecino_de(self,nodoA,nodoB) -> bool:
+        indiceA = self.indices.index(nodoA)
+        indiceB = self.indices.index(nodoB)
+        return self.matriz[indiceA][indiceB] != 0
+    
+    def vecinos_de(self,nodo) -> list[int]:
+        indice = self.indices.index(nodo)
+        vecinos = self.matriz[indice]
+        return [self.indices[i] for i in range(len(vecinos)) if vecinos[i] != 0]
+
+    def __str__(self):
+        string = f"Nodos: {self.indices}\n"
+        for fila in self.matriz:
+            string += str(fila) + "\n"
+        return string
+
+def main():
+    graf = GrafoMatrizAdyacencia()
+    graf.agregar_nodo(1)
+    graf.agregar_nodo(2)
+    graf.agregar_nodo(3)
+    graf.agregar_nodo(4)
+
+    graf.agregar_arista(1,2)
+    graf.agregar_arista(1,3)
+    graf.agregar_arista(2,4)
+    graf.agregar_arista(3,4)
+    print(graf)
+
+    graf.eliminar_arista(1,2)
+    print(graf)
+
+    graf.eliminar_nodo(2)
+    print(graf)
+
+    print(graf.vecinos_de(3))
+    print(graf.es_vecino_de(1,4))
+
+if __name__ == "__main__":
+    main()

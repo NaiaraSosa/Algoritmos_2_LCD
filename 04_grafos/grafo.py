@@ -76,8 +76,24 @@ class Grafo(Generic[T]):
             if nodo not in visitados:
                 dfs_recursivo(nodo, visitados, recorrido)
         return recorrido
-
     
+
+    def dfs_cola(self) -> list[T]:
+
+        def dfs2(recorrido,pila):
+            actual = pila.pop()
+            vecinos_actual = self.vecinos_de(actual) 
+            recorrer = [vecino for vecino in vecinos_actual if not vecino in recorrido+pila]    
+            pila = pila + recorrer
+            recorrido.append(actual)
+            if pila:    
+                dfs2(recorrido,pila)
+        recorrido = [list(self.vertices)[0]]
+        
+        dfs2(recorrido,recorrido)
+        return recorrido
+
+
     def bfs_cola(self) -> list[T]:
 
         def bfs_interno(queue, recorrido: list[T]) -> list[T]:
@@ -93,10 +109,29 @@ class Grafo(Generic[T]):
         nodo_inicial = [next(iter(self.vertices))]
         return bfs_interno(nodo_inicial, []) 
     
+    def existe_conexion(self, valor1: T, valor2: T) -> bool:
+        visitados = set()
 
-    def existe_conexion(self, valor1: T, valor2: T) -> bool:  
-        if self.es_vecino(valor1, valor2):
-            return True
+        # Función auxiliar recursiva para realizar la búsqueda
+        def dfs(nodo_actual: T) -> bool:
+            visitados.add(nodo_actual)
+            
+            # Si el nodo actual es igual al nodo de destino, se encontró una conexión
+            if nodo_actual == valor2:
+                return True
+            
+            # Explorar los vecinos del nodo actual
+            for vecino in self.vecinos_de(nodo_actual):
+                # Si el vecino no ha sido visitado, realizar una búsqueda desde él
+                if vecino not in visitados:
+                    if dfs(vecino):
+                        return True
+            
+            # Si no se encontró una conexión desde el nodo actual, retornar False
+            return False
+        
+        # Llamar a la función auxiliar dfs con el nodo inicial
+        return dfs(valor1)
 
 
 if __name__ == '__main__':
