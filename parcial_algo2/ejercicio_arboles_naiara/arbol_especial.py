@@ -41,6 +41,12 @@ class ArbEsp:
         assert self.raiz is not None
         self.raiz.sd = sd
 
+    def __len__(self) -> int:
+        if self.es_vacio():
+            return 0
+        else:
+            return 1 + len(self.si()) + len(self.sd())
+
     def preorder(self) -> list[int]:
         if self.es_vacio():
             return []
@@ -70,6 +76,14 @@ class ArbEsp:
         dfs_especiales = self.preorder_especial()
         cant_dfs_especiales = len(dfs_especiales)
         return cant_dfs - cant_dfs_especiales
+
+    def podados_bien(self) -> int:
+        if self.es_vacio():
+            return 0
+        elif self.raiz.especial: # type: ignore
+            return self.__len__() - 1
+        else:
+            return self.si().podados() + self.sd().podados()
     
 
 

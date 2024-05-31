@@ -23,6 +23,7 @@ def main():
     print(f'El 0 es especial: {t.es_especial(0)}')
 
     print(f'Cantidad de nodos no recorridos: {t.podados()}')
+    print(f'Cantidad de nodos no recorridos: {t.podados_bien()}')
 
 
 if __name__ == '__main__':
